@@ -1,0 +1,75 @@
+.nav-header {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* shadow */
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 25px 5px 25px;
+}
+
+.restaurent-name {
+  font-family: 'Roboto';
+  font-weight: 600;
+  font-size: 30px;
+  cursor: pointer;
+  margin: 0%;
+}
+
+@media screen and (max-width: 576px) {
+  .restaurent-name {
+    font-size: 22px;
+  }
+}
+
+.my-orders-cart-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+@media screen and (max-width: 576px) {
+  .my-orders-cart-container {
+    gap: 10px;
+  }
+}
+
+.my-orders-text {
+  font-family: 'Roboto';
+  font-weight: 500;
+  font-size: 18px;
+  color: #585555;
+}
+
+.cart-count {
+  text-align: center;
+  background-color: #ff6347;
+  padding: 4px 2px 2px;
+  color: #ffff;
+  font-family: 'Roboto';
+  font-weight: 500;
+  font-size: 14px;
+  min-width: 25px;
+  border-radius: 50%;
+}
+
+/* Container around the icon and badge */
+.cart-icon-container {
+  position: relative; /* makes the badge position relative to this */
+  display: inline-block; /* shrink to icon size */
+}
+
+/* Cart count badge */
+.cart-count-badge {
+  position: absolute;
+  top: -8px; /* adjust to appear above the icon */
+  right: -8px; /* adjust horizontally if needed */
+  width: 18px;
+  height: 18px;
+  background-color: red;
+  color: white;
+  font-size: 12px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
