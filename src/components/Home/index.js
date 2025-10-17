@@ -1,4 +1,4 @@
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useContext} from 'react'
 
 import Loader from 'react-loader-spinner'
 
@@ -6,46 +6,49 @@ import Header from '../Header'
 import DishItem from '../DishItem'
 import TabItem from '../TabItem'
 
+import CartContext from '../../context/CartContext'
+
 import './index.css'
 
 const Home = () => {
   const [isLoading, setIsLoading] = useState(true)
   const [activeTabId, setActiveTabId] = useState('')
   const [menuCategories, setMenuCategories] = useState([])
-  const [cartList, setCartList] = useState([])
 
-  const addItemToCart = dishDetails => {
-    const isItemFound = cartList.find(
-      item => item.dishId === dishDetails.dishId,
-    )
-    if (!isItemFound) {
-      const newDish = {...dishDetails, quantity: 1}
-      setCartList(prev => [...prev, newDish])
-    } else {
-      setCartList(prev =>
-        prev.map(item =>
-          item.dishId === dishDetails.dishId
-            ? {...item, quantity: item.quantity + 1}
-            : item,
-        ),
-      )
-    }
-  }
+  const {cartList, setRestaurantName} = useContext(CartContext)
 
-  const removeItemFromCart = dish => {
-    const isAlreadyExists = cartList.find(item => item.dishId === dish.dishId)
-    if (isAlreadyExists) {
-      setCartList(prev =>
-        prev
-          .map(item =>
-            item.dishId === dish.dishId
-              ? {...item, quantity: item.quantity - 1}
-              : item,
-          )
-          .filter(item => item.quantity > 0),
-      )
-    }
-  }
+  // const addItemToCart = dishDetails => {
+  //   const isItemFound = cartList.find(
+  //     item => item.dishId === dishDetails.dishId,
+  //   )
+  //   if (!isItemFound) {
+  //     const newDish = {...dishDetails, quantity: 1}
+  //     setCartList(prev => [...prev, newDish])
+  //   } else {
+  //     setCartList(prev =>
+  //       prev.map(item =>
+  //         item.dishId === dishDetails.dishId
+  //           ? {...item, quantity: item.quantity + 1}
+  //           : item,
+  //       ),
+  //     )
+  //   }
+  // }
+
+  // const removeItemFromCart = dish => {
+  //   const isAlreadyExists = cartList.find(item => item.dishId === dish.dishId)
+  //   if (isAlreadyExists) {
+  //     setCartList(prev =>
+  //       prev
+  //         .map(item =>
+  //           item.dishId === dish.dishId
+  //             ? {...item, quantity: item.quantity - 1}
+  //             : item,
+  //         )
+  //         .filter(item => item.quantity > 0),
+  //     )
+  //   }
+  // }
 
   const transformMenuData = tableMenuList =>
     tableMenuList.map(eachMenu => ({
@@ -73,6 +76,7 @@ const Home = () => {
     const data = await apiResponse.json()
     const updatedData = transformMenuData(data[0].table_menu_list)
     setMenuCategories(updatedData)
+    setRestaurantName(data[0].restaurant_name)
     setActiveTabId(updatedData[0].menuCategoryId)
     setIsLoading(false)
   }
@@ -113,26 +117,24 @@ const Home = () => {
     return (
       <ul className="dishList-container">
         {categoryDishes.map(eachDish => (
-          <DishItem
-            key={eachDish.dishId}
-            dishDetails={eachDish}
-            cartList={cartList}
-            addItemToCart={addItemToCart}
-            removeItemFromCart={removeItemFromCart}
-          />
+          <DishItem key={eachDish.dishId} dishDetails={eachDish} />
         ))}
       </ul>
     )
   }
 
-  return isLoading ? (
-    renderLoader()
-  ) : (
-    <div className="home-background">
-      <Header cartList={cartList} />
-      {renderTabs()}
-      {renderDishes()}
-    </div>
+  return (
+    <>
+      {isLoading ? (
+        renderLoader()
+      ) : (
+        <div className="home-background">
+          <Header />
+          {renderTabs()}
+          {renderDishes()}
+        </div>
+      )}
+    </>
   )
 }
 

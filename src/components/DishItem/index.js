@@ -1,7 +1,10 @@
+import {useState, useContext} from 'react'
+import CartContext from '../../context/CartContext'
+
 import './index.css'
 
 const DishItem = props => {
-  const {dishDetails, addItemToCart, removeItemFromCart, cartList} = props
+  const {dishDetails} = props
   const {
     dishAvailability,
     dishCalories,
@@ -15,28 +18,44 @@ const DishItem = props => {
     dishId,
   } = dishDetails
 
-  const onClickDecrement = () => {
-    removeItemFromCart(dishDetails)
+  const [quantity, setQuantity] = useState(0)
+  const {addCartItem} = useContext(CartContext)
+
+  // const onClickDecrement = () => {
+  //   removeItemFromCart(dishDetails)
+  // }
+
+  // const onClickIncrement = () => {
+  //   addItemToCart(dishDetails)
+  // }
+
+  // const getDishQuantity = () => {
+  //   const isdishItemFound = cartList.find(
+  //     dishItem => dishItem.dishId === dishId,
+  //   )
+  //   return isdishItemFound ? isdishItemFound.quantity : 0
+  // }
+
+  const onDecrementQuantity = () => {
+    setQuantity(prevQuantity => (prevQuantity > 0 ? prevQuantity - 1 : 0))
   }
 
-  const onClickIncrement = () => {
-    addItemToCart(dishDetails)
+  const onIncrementQuantity = () => {
+    setQuantity(prevQuantity => prevQuantity + 1)
   }
 
-  const getDishQuantity = () => {
-    const isdishItemFound = cartList.find(
-      dishItem => dishItem.dishId === dishId,
-    )
-    return isdishItemFound ? isdishItemFound.quantity : 0
+  const onClickAddToCart = () => {
+    const newCartItem = {...dishDetails, quantity}
+    addCartItem(newCartItem)
   }
 
   const quantityControllerContainer = () => (
     <div className="quantity-controller-container">
-      <button type="button" onClick={onClickDecrement}>
+      <button type="button" onClick={onDecrementQuantity}>
         -
       </button>
-      <p>{getDishQuantity()}</p>
-      <button type="button" onClick={onClickIncrement}>
+      <p>{quantity}</p>
+      <button type="button" onClick={onIncrementQuantity}>
         +
       </button>
     </div>
@@ -67,10 +86,18 @@ const DishItem = props => {
           ) : (
             <p className="not-availability-text">Not available</p>
           )}
-          {addonCat.length > 0 ? (
+          {addonCat.length > 0 && (
             <p className="customizations-text">Customizations available</p>
-          ) : (
-            ''
+          )}
+
+          {dishAvailability && quantity > 0 && (
+            <button
+              type="button"
+              className="add-to-cart-btn"
+              onClick={onClickAddToCart}
+            >
+              ADD TO CART
+            </button>
           )}
         </div>
       </div>

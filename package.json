@@ -11,11 +11,13 @@
     "@testing-library/react": "11.2.5",
     "@testing-library/user-event": "12.6.2",
     "chalk": "4.1.0",
+    "js-cookie": "3.0.5",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "react-icons": "4.2.0",
     "react-loader-spinner": "4.0.0",
-    "react-router-dom": "5.3.0"
+    "react-router-dom": "5.3.0",
+    "reactjs-popup": "2.0.6"
   },
   "devDependencies": {
     "eslint-config-airbnb": "18.2.1",
